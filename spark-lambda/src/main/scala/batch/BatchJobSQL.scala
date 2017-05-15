@@ -3,29 +3,16 @@ package batch
 import java.lang.management.ManagementFactory
 
 import domain._
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SQLContext
+import utils.SparkUtils._
 
 /**
   * Created by ragu on 4/16/2017.
   */
 object BatchJobSQL {
   def main (args: Array[String]) : Unit = {
-    val conf = new SparkConf().setAppName("Spark Demo")
-
-    if(ManagementFactory.getRuntimeMXBean.getInputArguments.toString.contains("IntelliJ IDEA")){
-      System.setProperty("hadoop.home.dir", "C:\\winutils")
-      conf.setMaster("local[*]")
-    }else {
-      println("In the else part")
-      val it = ManagementFactory.getRuntimeMXBean.getInputArguments.iterator()
-      while (it.hasNext){
-        println(it.next())
-      }
-    }
-
-    val sc = new SparkContext(conf)
-    implicit val sqlContext = new SQLContext(sc)
+    val sc = getSparkContext("Spark Demo")
+    val sqlContext = new SQLContext(sc)
 
     val sourceFile = "file:///d:/work-shop/spark-workspace/spark-kafka-cassandra-applying-lambda-architecture/vagrant/data.tsv"
 

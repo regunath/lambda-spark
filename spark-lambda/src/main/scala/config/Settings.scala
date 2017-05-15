@@ -16,6 +16,13 @@ object Settings {
     lazy val pages = weblogGen.getInt("pages")
     lazy val visitors = weblogGen.getInt("visitors")
     lazy val filePath = weblogGen.getString("file_path")
+    lazy val destPath = weblogGen.getString("dest_path")
+    lazy val numberOfFiles = weblogGen.getInt("number_of_files")
+    lazy val sourceFileURLDocker = weblogGen.getString("sourceFileDocker")
+    lazy val docker_file_path = weblogGen.getString("docker_file_path")
+    lazy val sourceFileURLVagrant = weblogGen.getString("sourceFileVagrant")
+    lazy val localCheckpointDir = weblogGen.getString("localCheckpointDir")
+    lazy val hdfsCheckpointDir = weblogGen.getString("hdfsCheckpointDir")
 
   }
 }

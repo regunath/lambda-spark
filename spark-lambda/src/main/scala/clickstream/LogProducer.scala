@@ -4,33 +4,40 @@ import java.io.FileWriter
 
 import config.Settings
 
+import org.slf4j.LoggerFactory
+
 import scala.util.Random
 
-/**
-  * Created by Ahmad Alkilani on 4/30/2016.
-  */
 object LogProducer extends App {
+
+  val logger = LoggerFactory.getLogger(this.getClass)
+  logger.info("Test debugging 12345....")
+  logger.debug("Test debugging....")
+  logger.error("Test debugging....122")
+
   // WebLog config
-  val wlc = Settings.WebLogGen
+  val config = Settings.WebLogGen
 
   val Products = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/products.csv")).getLines().toArray
   val Referrers = scala.io.Source.fromInputStream(getClass.getResourceAsStream("/referrers.csv")).getLines().toArray
-  val Visitors = (0 to wlc.visitors).map("Visitor-" + _)
-  val Pages = (0 to wlc.pages).map("Page-" + _)
+  val Visitors = (0 to config.visitors).map("Visitor-" + _)
+  val Pages = (0 to config.pages).map("Page-" + _)
 
   val rnd = new Random()
 
-  val filePath = wlc.filePath
+
+//  val filePath = config.filePath
+  val filePath = config.docker_file_path
   val fw = new FileWriter(filePath, true)
 
   // introduce a bit of randomness to time increments for demo purposes
-  val incrementTimeEvery = rnd.nextInt(math.min(wlc.records, 100) - 1) + 1
+  val incrementTimeEvery = rnd.nextInt(math.min(config.records, 100) - 1) + 1
 
   var timestamp = System.currentTimeMillis()
   var adjustedTimestamp = timestamp
 
-  for (iteration <- 1 to wlc.records) {
-    adjustedTimestamp = adjustedTimestamp + ((System.currentTimeMillis() - timestamp) * wlc.timeMultiplier)
+  for (iteration <- 1 to config.records) {
+    adjustedTimestamp = adjustedTimestamp + ((System.currentTimeMillis() - timestamp) * config.timeMultiplier)
     timestamp = System.currentTimeMillis() // move all this to a function
     val action = iteration % (rnd.nextInt(200) + 1) match {
         case 0 => "purchase"

@@ -1,30 +1,15 @@
 package batch
 
-import java.lang.management.ManagementFactory
-
 import domain._
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{SQLContext, SaveMode}
+import utils.SparkUtils.getSparkContext
 
 /**
   * Created by ragu on 4/16/2017.
   */
 object BatchJobHDFS {
   def main (args: Array[String]) : Unit = {
-    val conf = new SparkConf().setAppName("Spark Demo")
-
-    if(ManagementFactory.getRuntimeMXBean.getInputArguments.toString.contains("IntelliJ IDEA")){
-      System.setProperty("hadoop.home.dir", "C:\\winutils")
-      conf.setMaster("local[*]")
-    }else {
-      println("In the else part")
-      val it = ManagementFactory.getRuntimeMXBean.getInputArguments.iterator()
-      while (it.hasNext){
-        println(it.next())
-      }
-    }
-
-    val sc = new SparkContext(conf)
+    val sc = getSparkContext("Spark Demo")
     implicit val sqlContext = new SQLContext(sc)
 
     val sourceFile = "file:///vagrant/data.tsv"
